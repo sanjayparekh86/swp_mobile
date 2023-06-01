@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
+import 'package:socialworkprotal/app/data/model/file_model.dart';
 import 'package:socialworkprotal/master/general_utils/common_stuff.dart';
 import 'package:socialworkprotal/master/general_utils/custom_appbar.dart';
-//import 'package:webview_flutter/webview_flutter.dart';
 import 'home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -29,11 +31,28 @@ class HomeView extends GetView<HomeController> {
             initialUrlRequest: URLRequest(url: Uri.parse("https://staging1.socialworkportal.com/mobile_api")),
             onWebViewCreated: (InAppWebViewController inAppWebViewController){
               controller.webViewController = inAppWebViewController;
+              controller.webViewController.addJavaScriptHandler(
+                handlerName: "downloadFileInApp",
+                callback: (data){
+                  if(data.isNotEmpty){
+                    controller.lstFileModel.clear();
+                    controller.lstFileModel.value = List<FileModel>.from(
+                        data.map((x) => FileModel.fromJson(x)));
+                    printInfo(info: "data: ${controller.lstFileModel.length}");
+                    controller.createFileFromString(controller.lstFileModel[0].content, controller.lstFileModel[0].ext, controller.lstFileModel[0].name).then((value) async {
+
+                    });
+                  }else{
+                    controller.lstFileModel.clear();
+                  }
+                },
+              );
             },
             initialOptions: InAppWebViewGroupOptions(
               crossPlatform: InAppWebViewOptions(
-                useOnDownloadStart: true,
                 transparentBackground: true,
+                allowFileAccessFromFileURLs: true,
+                allowUniversalAccessFromFileURLs: true
               ),
             ),
             onLoadStart: (inAPpWebViewController, url){
@@ -42,12 +61,29 @@ class HomeView extends GetView<HomeController> {
             onLoadStop: (inAPpWebViewController, url){
               EasyLoading.dismiss();
             },
+            /*onDownloadStart: (controller, url) async {
+              print("url: ${url}");
+              final filename = url.toString().substring(url.toString().lastIndexOf("/") + 1);
+              var dir = await getExternalStorageDirectory();
+              if(dir != null){
+                 *//*await FlutterDownloader.enqueue(
+                  url: url.toString(),
+                  fileName: filename,
+                  saveInPublicStorage: true,
+                  savedDir: dir.path,
+                  showNotification: true, // show download progress in status bar (for Android)
+                  openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+                );*//*
+              }
+
+            },*/
             onUpdateVisitedHistory: (inAppWebViewController, url, androidIsReload){
-              print("url!.host: ${url!}");
+              print("url!.host: ${url!.origin}");
             },
           ),
         ),
       ),
     );
   }
+
 }
