@@ -28,21 +28,27 @@ class HomeView extends GetView<HomeController> {
         ),
         body: SafeArea(
           child: InAppWebView(
-            initialUrlRequest: URLRequest(url: Uri.parse("https://staging1.socialworkportal.com/mobile_api")),
-            onWebViewCreated: (InAppWebViewController inAppWebViewController){
+            initialUrlRequest: URLRequest(
+                url: Uri.parse(
+                    "https://staging1.socialworkportal.com/mobile_api"),
+                headers: {"mobile_api": "1"}),
+            onWebViewCreated: (InAppWebViewController inAppWebViewController) {
               controller.webViewController = inAppWebViewController;
               controller.webViewController.addJavaScriptHandler(
                 handlerName: "downloadFileInApp",
-                callback: (data){
-                  if(data.isNotEmpty){
+                callback: (data) {
+                  if (data.isNotEmpty) {
                     controller.lstFileModel.clear();
                     controller.lstFileModel.value = List<FileModel>.from(
                         data.map((x) => FileModel.fromJson(x)));
                     printInfo(info: "data: ${controller.lstFileModel.length}");
-                    controller.createFileFromString(controller.lstFileModel[0].content, controller.lstFileModel[0].ext, controller.lstFileModel[0].name).then((value) async {
-
-                    });
-                  }else{
+                    controller
+                        .createFileFromString(
+                            controller.lstFileModel[0].content,
+                            controller.lstFileModel[0].ext,
+                            controller.lstFileModel[0].name)
+                        .then((value) async {});
+                  } else {
                     controller.lstFileModel.clear();
                   }
                 },
@@ -50,34 +56,38 @@ class HomeView extends GetView<HomeController> {
             },
             initialOptions: InAppWebViewGroupOptions(
               crossPlatform: InAppWebViewOptions(
-                transparentBackground: true,
-                allowFileAccessFromFileURLs: true,
-                allowUniversalAccessFromFileURLs: true
-              ),
+                  transparentBackground: true,
+                  allowFileAccessFromFileURLs: true,
+                  allowUniversalAccessFromFileURLs: true),
             ),
-            onLoadStart: (inAPpWebViewController, url){
+            onLoadStart: (inAPpWebViewController, url) {
+              print("started to load: $url");
               EasyLoaderAnimation.showEasyLoader();
+              CookieManager.instance().setCookie(url: Uri.parse(
+                  "https://staging1.socialworkportal.com"), name: "mobile_api", value: "1");
             },
-            onLoadStop: (inAPpWebViewController, url){
+            onLoadStop: (inAPpWebViewController, url) {
               EasyLoading.dismiss();
+         //     inAPpWebViewController.webStorage.sessionStorage.setItem(key: "mymobile_view", value: "1");
             },
             /*onDownloadStart: (controller, url) async {
               print("url: ${url}");
               final filename = url.toString().substring(url.toString().lastIndexOf("/") + 1);
               var dir = await getExternalStorageDirectory();
               if(dir != null){
-                 *//*await FlutterDownloader.enqueue(
+                 */ /*await FlutterDownloader.enqueue(
                   url: url.toString(),
                   fileName: filename,
                   saveInPublicStorage: true,
                   savedDir: dir.path,
                   showNotification: true, // show download progress in status bar (for Android)
                   openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-                );*//*
+                );*/ /*
               }
 
             },*/
-            onUpdateVisitedHistory: (inAppWebViewController, url, androidIsReload){
+            onUpdateVisitedHistory:
+                (inAppWebViewController, url, androidIsReload) {
               print("url!.host: ${url!.origin}");
             },
           ),
@@ -85,5 +95,4 @@ class HomeView extends GetView<HomeController> {
       ),
     );
   }
-
 }
