@@ -64,7 +64,7 @@ class HomeView extends GetView<HomeController> {
               print("started to load: $url");
               EasyLoaderAnimation.showEasyLoader();
               CookieManager.instance().setCookie(url: Uri.parse(
-                  "https://staging1.socialworkportal.com"), name: "mobile_api", value: "1");
+                  "https://staging1.socialworkportal.com/mobile_api"), name: "mobile_api", value: "1");
             },
             onLoadStop: (inAPpWebViewController, url) {
               EasyLoading.dismiss();
