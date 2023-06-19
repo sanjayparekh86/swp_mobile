@@ -5,33 +5,32 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:socialworkprotal/master/general_utils/app_themes.dart';
+import 'package:socialworkportal/master/general_utils/app_themes.dart';
 
 import 'app/routes/app_pages.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  AwesomeNotifications().initialize(
-      'resource://drawable/splash_icon',
-      [            // notification icon
-        NotificationChannel(
-          channelGroupKey: 'basic_test',
-          channelKey: 'basic',
-          channelName: 'Basic notifications',
-          channelDescription: 'Notification channel for basic tests',
-          channelShowBadge: true,
-          importance: NotificationImportance.High,
-          enableVibration: true,
-        ),
-        //add more notification type with different configuration
-      ]
-  );
+  AwesomeNotifications().initialize('resource://drawable/splash_icon', [
+    // notification icon
+    NotificationChannel(
+      channelGroupKey: 'basic_test',
+      channelKey: 'basic',
+      channelName: 'Basic notifications',
+      channelDescription: 'Notification channel for basic tests',
+      // channelShowBadge: false,
+      importance: NotificationImportance.High,
+      enableVibration: true,
+    ),
+    //add more notification type with different configuration
+  ]);
   AwesomeNotifications().requestPermissionToSendNotifications();
   await Permission.storage.request();
   await Permission.manageExternalStorage.request();
   await Permission.notification.request();
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+  await Permission.phone.request();
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   runApp(
     GetMaterialApp(
       title: "Social Work Portal",

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:awesome_notifications/awesome_notifications.dart';
@@ -6,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:socialworkprotal/app/data/model/file_model.dart';
-import 'package:socialworkprotal/master/general_utils/notification_controller.dart';
+import 'package:socialworkportal/app/data/model/file_model.dart';
+import 'package:socialworkportal/master/general_utils/notification_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController
@@ -40,7 +43,9 @@ class HomeController extends GetxController {
             channelKey: 'basic',
             title: 'File Downloaded Successfully',
             body: fileName,
-            summary: filePath
+            summary: filePath,
+            badge: 0
+
           )
       );
     }

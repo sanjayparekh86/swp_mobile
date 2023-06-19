@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:socialworkprotal/master/general_utils/constants.dart';
+import 'package:socialworkportal/master/general_utils/constants.dart';
 
 // Light colorScheme
 const lightPrimaryColor = Color(0xff2f4050);

@@ -1,4 +1,4 @@
-package com.swp.socialworkprotal
+package com.socialworkportal.casework
 
 import io.flutter.embedding.android.FlutterActivity
 

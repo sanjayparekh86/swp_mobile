@@ -1,5 +1,5 @@
-name: socialworkprotal
-version: 1.0.0+1
+name: socialworkportal
+version: 1.0.0+2
 publish_to: none
 description: A new Flutter project.
 environment: 
@@ -20,6 +20,8 @@ dependencies:
 
   flutter: 
     sdk: flutter
+  url_launcher: ^6.1.11
+
 
 dev_dependencies: 
   flutter_lints: ^2.0.0

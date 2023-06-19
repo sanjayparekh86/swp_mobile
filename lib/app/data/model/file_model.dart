@@ -12,22 +12,30 @@ class FileModel {
   String? name;
   String? content;
   String? ext;
+  String? username;
+  String? password;
 
   FileModel({
     this.name,
     this.content,
     this.ext,
+    this.username,
+    this.password,
   });
 
   factory FileModel.fromJson(Map<String, dynamic> json) => FileModel(
     name: json["name"],
     content: json["content"],
     ext: json["ext"],
+    username: json["username"],
+    password: json['password']
   );
 
   Map<String, dynamic> toJson() => {
     "name": name,
     "content": content,
     "ext": ext,
+    "username": username,
+    "password": password
   };
 }
