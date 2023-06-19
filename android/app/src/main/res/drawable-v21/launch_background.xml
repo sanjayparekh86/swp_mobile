@@ -6,6 +6,8 @@
     <!-- You can insert your own image assets here -->
     <item
         android:id="@+id/main_logo"
+        android:width="200dp"
+        android:height="200dp"
         android:gravity="center">
         <bitmap
             android:src="@drawable/splash_icon" />
